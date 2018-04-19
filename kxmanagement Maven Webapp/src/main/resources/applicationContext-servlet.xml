@@ -7,7 +7,7 @@ xmlns:p="http://www.springframework.org/schema/p"
     xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
-
+ 
 <!-- springmvc相关的配置文件 -->
 <context:component-scan base-package="com.kx.controller*"></context:component-scan>
 <!-- 开启默认servlet读取静态资源 -->

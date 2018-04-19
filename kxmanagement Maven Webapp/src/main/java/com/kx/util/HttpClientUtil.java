@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class HttpClientUtil {
+public final class HttpClientUtil {
 	  /** 
      * 向指定URL发送GET方法的请求 
      *  @author  from Internet

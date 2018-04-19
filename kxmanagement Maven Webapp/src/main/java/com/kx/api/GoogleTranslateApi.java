@@ -6,8 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.kx.util.HttpClientUtil;
+@Component
 public class GoogleTranslateApi {
 	
 @Value("${google.translate.url}")

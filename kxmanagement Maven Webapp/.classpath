@@ -28,5 +28,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ocean.client.java.biz.jar" sourcepath="/Users/yuanhaohe/Downloads/HTB1NMJba5qAXuNjy1XdM7OYcVXaB-1/ocean.client.java.biz-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -29,6 +29,5 @@
         </property>
     </bean>
     
-    <bean class="com.kx.api.GoogleTranslateApi"></bean>
      
 </beans>
