@@ -1,1 +1,2 @@
 # kxmanagement
+项目导进去之后，保留Util和API包下的java文件，其他JAVA文件可删除
