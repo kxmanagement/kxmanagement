@@ -1,37 +1,47 @@
 package com.kx.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.kx.api.GoogleTranslateApi;
-import com.kx.enums.UserConstant;
-import com.kx.service.LoginService;
-
+import com.kx.model.RefreshToken;
+import com.kx.service.AlibabaApiService;
+import com.kx.service.GoogleTranslateService;
+/**
+ * 测试TestController
+ * @author yuanhaohe
+ *
+ */
 @Controller
 public class TestController {
+
 @Autowired
-LoginService loginService;
+GoogleTranslateService googleApi;
+
 @Autowired
-GoogleTranslateApi googleApi;
+AlibabaApiService alibabaApiService;
+
 	@RequestMapping("test.json")
 	@ResponseBody
-	public String login(String username,String password,HttpSession session){
+	public String login(String code,HttpSession session){
+		System.out.println(code);
+		RefreshToken token=alibabaApiService.getTokenByCode(code);
+		alibabaApiService.updateProperties(token);
 		JSONObject json=new JSONObject();
-		String s="神说: 要有光 ";
-
-		if(loginService.login(username, password)){
-			Map<String,String> map=googleApi.translate(GoogleTranslateApi.CHINESE, GoogleTranslateApi.ENGLISH, s);
-			json.put("原文", map.get("from"));
-			json.put("翻译后", map.get("to"));
-		}
+		return json.toJSONString();
 		
+	}
+	
+	@RequestMapping("token.json")
+	public String token(@RequestBody RefreshToken refreshToken){
+		System.out.println(refreshToken);
+
+		JSONObject json=new JSONObject();
 		return json.toJSONString();
 	}
 }

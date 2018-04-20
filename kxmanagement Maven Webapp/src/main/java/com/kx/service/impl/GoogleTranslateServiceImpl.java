@@ -1,4 +1,4 @@
-package com.kx.api;
+package com.kx.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,40 +8,20 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.kx.service.GoogleTranslateService;
 import com.kx.util.HttpClientUtil;
 @Component
-public class GoogleTranslateApi {
+public class GoogleTranslateServiceImpl implements GoogleTranslateService{
 	
 @Value("${google.translate.url}")
 	private  String googleApiUrl;
-	 //英语
-	public static final String ENGLISH="en";
-	//中文
-	public static final String CHINESE="zh-CN";
-	//俄语
-	public static final String RUSSIAN="ru_RU";
-	//葡萄牙语
-	public static final String PORTUAUESE="pt-PT";
-	//日语
-	public static final String JAPANESE="ja-JP";
-	//意大利语
-	public static final String ITALIAA="it-IT";
-	//韩语
-	public static final String KOREAN="ko_KR";
-	//法语
-	public static final String FRENCH="fr-FR";
-	//德语
-	public static final String GERMAN="de-DE";
-
-
-	
 	
 	/**
 	 * @author yuanhaohe
 	 * @param from 原语种缩写
 	 * @param to   目的语种缩写
 	 * @param content 待翻译内容
-	 * @return HashMap<String,String>,key=from时，返回的是原文，key=to时，返回的是翻译后的
+	 * @return HashMap<String,String>,key=GoogleTranslateService.FROM_LANGUAGE时，返回的是原文，key=GoogleTranslateService.TO_LANGUAGE时，返回的是翻译后的
 	 */
 	public  Map<String, String> translate(String from, String to, String content) {
 		
