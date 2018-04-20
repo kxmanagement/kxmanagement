@@ -1,7 +1,8 @@
 package com.kx.auth;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.stereotype.Component;
 
 import com.kx.util.CommonUtil;
 
@@ -35,31 +36,5 @@ public class ClientAuthService extends AuthService{
         return CommonUtil.getWholeUrl(url, params);
     }
     
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        String host = "gw.open.1688.com";//国际交易请用"gw.api.alibaba.com"
-        String site = "china";//国际交易请用"aliexpress"
-        String client_id = "6853631";
-        String appSecret = "eEldSx7ZVg";
-        //若为客户端授权，那么回调地址可以是三种形式，具体可参考文档：
-        //(1)urn:ietf:wg:oauth:2.0:oob
-        //(2)http://localhost:port
-        //(3)http://gw.open.1688.com/auth/authCode.htm（国际交易请用"gw.api.alibaba.com"）
-        //若为WEB端授权，那么回调地址应该是app的入口地址
-        String redirect_uri = "http://localhost:8080/kxmanagement/test.json";
-//        String state = "test";//用户自定义参数，建议填写
-        
-        //测试获取客户端授权的临时令牌code
-        Map<String, String> params2 = new HashMap<String, String>();
-        params2.put("site", site);
-        params2.put("client_id", client_id);
-        params2.put("redirect_uri", redirect_uri);
-//        params2.put("state", state);
-        String getCodeForClientResult = getClientAuthUrl(host, params2, appSecret);
-        System.out.println("请在浏览器中访问如下地址并输入网站用户名密码进行授权: " + getCodeForClientResult);
-        
-    }
-
+  
 }

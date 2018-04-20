@@ -1,7 +1,6 @@
 package com.kx.service.impl;
 
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,6 +21,10 @@ import com.kx.auth.AuthService;
 import com.kx.model.RefreshToken;
 import com.kx.service.AlibabaApiService;
 @Component
+/**
+ * AlibabaApi接口封装服务
+ * @author yuanhaohe
+ */
 public class AlibabaApiServiceImpl implements AlibabaApiService{
 	@Value("${alibaba.client_id}")
 private String client_id;
@@ -29,6 +32,10 @@ private String client_id;
 	private String client_secret;
 	@Value("${alibaba.redirect_uri}")
 	private String redirect_uri;
+	/**
+	 * @param token 得到的token 
+	 * @author yuanhaohe
+	 */
 	@Override
 	public AlibabaProductGetListResult apiExecutor(String token) {
 				ApiExecutor apiExecutor = new ApiExecutor(client_id,client_secret); 
@@ -37,7 +44,9 @@ private String client_id;
 				//以创建订单API为例，API名称：alibaba.trade.fastCreateOrder
 				AlibabaProductGetListParam param=new AlibabaProductGetListParam();
 		param.setWebSite("1688");
-				param.setPageSize(30);
+		param.setPageNo(1);
+		param.setCategoryID((long) -1);
+	param.setPageSize(30);
 				//调用API并获取返回结果
 				 AlibabaProductGetListResult result = apiExecutor.execute(param,token); 
 				//对返回结果进行操作
@@ -49,7 +58,12 @@ private String client_id;
 		// TODO 自动生成的方法存根
 		return result;
 	}
-
+/**
+ * @param 传入回调的code
+ * @author yuanhaohe
+ * 
+ * @return code有效 则返回得到的RefreshToken 否则将返回null
+ */
 	@Override
 	public RefreshToken getTokenByCode(String code) {
 Map<String,String> param=new HashMap<String, String>();
@@ -57,8 +71,18 @@ param.put("client_id", client_id);
 param.put("client_secret", client_secret);
 param.put("redirect_uri", redirect_uri);
 param.put("code", code);
-String text=AuthService.getToken("gw.api.alibaba.com",param, true);
-return 	JSONObject.parseObject(text, RefreshToken.class);
+String text=null;
+try{
+ text=AuthService.getToken("gw.api.alibaba.com",param, true);
+}catch(RuntimeException e){
+	
+}
+if(text!=null){
+RefreshToken token=JSONObject.parseObject(text, RefreshToken.class);
+updateProperties(token);
+return token;
+}
+return 	null;
 	}
 
 	@Override
@@ -66,15 +90,16 @@ return 	JSONObject.parseObject(text, RefreshToken.class);
 		Map<String,String> param=new HashMap<String, String>();
 		param.put("client_id", client_id);
 		param.put("client_secret", client_secret);
-		String text=AuthService.refreshToken("gw.api.alibaba.com", param);
 		param.put("refresh_token", refreshToken);
+		param.put("redirect_uri", redirect_uri);
+		String text=AuthService.refreshToken("gw.api.alibaba.com", param);
 		return 	JSONObject.parseObject(text, RefreshToken.class);
 	}
 	
 	public void updateProperties(RefreshToken refreshToken){
 		Properties p=new Properties();
 		String file=AlibabaApiService.class.getResource("/").getPath().toString()+"alibaba.properties";
-		System.out.println(file);
+
 		FileOutputStream out=null;
 		try {
 			p.setProperty("alibaba.aliId", refreshToken.getAliId());
@@ -84,6 +109,7 @@ return 	JSONObject.parseObject(text, RefreshToken.class);
 			p.setProperty("alibaba.refresh_token", refreshToken.getRefresh_token());
 			p.setProperty("alibaba.refresh_token_timeout", refreshToken.getRefresh_token_timeout());
 			p.setProperty("alibaba.access_token", refreshToken.getAccess_token());
+			p.setProperty("alibaba.createdate",String.valueOf(System.currentTimeMillis()));
 			 out=new FileOutputStream(file);
 			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd- hh:mm:ss");
 	p.store(out, format.format(new Date()));
@@ -102,8 +128,6 @@ return 	JSONObject.parseObject(text, RefreshToken.class);
 					e.printStackTrace();
 				}
 			}
-			
-		
 		}
 	}
 	

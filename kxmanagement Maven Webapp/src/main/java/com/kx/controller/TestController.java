@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.product.param.AlibabaProductGetListResult;
+import com.alibaba.product.param.AlibabaProductGetResult;
+import com.kx.email.EmailService;
 import com.kx.model.RefreshToken;
 import com.kx.service.AlibabaApiService;
 import com.kx.service.GoogleTranslateService;
@@ -19,7 +22,8 @@ import com.kx.service.GoogleTranslateService;
  */
 @Controller
 public class TestController {
-
+@Autowired
+EmailService emailService;
 @Autowired
 GoogleTranslateService googleApi;
 
@@ -31,7 +35,19 @@ AlibabaApiService alibabaApiService;
 	public String login(String code,HttpSession session){
 		System.out.println(code);
 		RefreshToken token=alibabaApiService.getTokenByCode(code);
-		alibabaApiService.updateProperties(token);
+		System.out.println(token);
+		AlibabaProductGetListResult result=	alibabaApiService.apiExecutor(token.getAccess_token());
+		JSONObject json=new JSONObject();
+		return json.toJSONString();
+		
+	}
+	
+	
+
+	@RequestMapping("email.json")
+	@ResponseBody
+	public String email(HttpSession session){
+		emailService.doSend();
 		JSONObject json=new JSONObject();
 		return json.toJSONString();
 		
